@@ -1,0 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+#editor {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #fff;
+  resize: vertical; /* Allow vertical resizing of the textarea */
+}
+
+#fontSizeSelect {
+  margin-top: 10px;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.btn-group {
+  margin-top: 10px;
+}
+
+.btn-group button {
+  margin-right: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.btn-group button:hover {
+  background-color: #0056b3;
+}
+
+#counts {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Additional styles for the text editor features */
+
+/* Text alignment buttons */
+#alignLeft, #alignCenter, #alignRight {
+  text-transform: capitalize;
+}
+
+/* Find and Replace buttons */
+#findText, #replaceText {
+  text-transform: capitalize;
+}
+
+/* Insert link button */
+#insertLink {
+  text-transform: capitalize;
+}
+
+/* Clear Formatting button */
+#clearFormatting {
+  text-transform: capitalize;
+}

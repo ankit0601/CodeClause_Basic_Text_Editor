@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complex Text Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div>
+        <button id="newFile">New</button>
+        <button id="openFile">Open</button>
+        <button id="saveFile">Save</button>
+        <button id="saveAsFile">Save As</button>
+        <button id="copyText">Copy</button>
+        <button id="cutText">Cut</button>
+        <button id="pasteText">Paste</button>
+        <button id="undo">Undo</button>
+        <button id="redo">Redo</button>
+        <select id="fontSizeSelect">
+            <option value="12">12px</option>
+            <option value="14">14px</option>
+            <option value="16">16px</option>
+            <option value="18">18px</option>
+            <option value="20">20px</option>
+            <option value="22">22px</option>
+            <option value="24">24px</option>
+            <option value="26">26px</option>
+            <option value="28">28px</option>
+        </select>
+        <div class="btn-group">
+            <button id="boldText">Bold</button>
+            <button id="italicText">Italic</button>
+            <button id="underlineText">Underline</button>
+            <button id="clearFormatting">Clear Formatting</button>
+        </div>
+        <div class="btn-group">
+            <button id="alignLeft">Align Left</button>
+            <button id="alignCenter">Align Center</button>
+            <button id="alignRight">Align Right</button>
+        </div>
+        <div class="btn-group">
+            <button id="findText">Find</button>
+            <button id="replaceText">Replace</button>
+            <button id="insertLink">Insert Link</button>
+        </div>
+        <div id="counts">
+            Character Count: <span id="charCount">0</span> |
+            Word Count: <span id="wordCount">0</span> |
+            Line Count: <span id="lineCount">0</span>
+        </div>
+    </div>
+    <div>
+        <textarea id="editor"></textarea>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const newFileBtn = document.getElementById('newFile');
+        const openFileBtn = document.getElementById('openFile');
+        const saveFileBtn = document.getElementById('saveFile');
+        const saveAsFileBtn = document.getElementById('saveAsFile');
+        const copyTextBtn = document.getElementById('copyText');
+        const cutTextBtn = document.getElementById('cutText');
+        const pasteTextBtn = document.getElementById('pasteText');
+        const undoBtn = document.getElementById('undo');
+        const redoBtn = document.getElementById('redo');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const boldTextBtn = document.getElementById('boldText');
+        const italicTextBtn = document.getElementById('italicText');
+        const underlineTextBtn = document.getElementById('underlineText');
+        const clearFormattingBtn = document.getElementById('clearFormatting');
+        const alignLeftBtn = document.getElementById('alignLeft');
+        const alignCenterBtn = document.getElementById('alignCenter');
+        const alignRightBtn = document.getElementById('alignRight');
+        const findTextBtn = document.getElementById('findText');
+        const replaceTextBtn = document.getElementById('replaceText');
+        const insertLinkBtn = document.getElementById('insertLink');
+        const charCountSpan = document.getElementById('charCount');
+        const wordCountSpan = document.getElementById('wordCount');
+        const lineCountSpan = document.getElementById('lineCount');
+
+        let currentFile = null;
+
+        newFileBtn.addEventListener('click', () => {
+            editor.value = '';
+            currentFile = null;
+        });
+
+        openFileBtn.addEventListener('click', () => {
+            const fileName = prompt('Enter the file name to open:');
+            if (fileName) {
+                // Implement an API call to the backend to fetch the file content by filename
+                // For simplicity, let's assume there's a function 'getFileContent' that fetches the content.
+                fetch(`/api/files/${fileName}`)
+                    .then(response => response.text())
+                    .then(content => {
+                        editor.value = content;
+                        currentFile = fileName;
+                    })
+                    .catch(error => console.error('Error fetching file:', error));
+            }
+        });
+
+        saveFileBtn.addEventListener('click', () => {
+            if (currentFile) {
+                // Implement an API call to the backend to save the file content by filename
+                // For simplicity, let's assume there's a function 'saveFileContent' that saves the content.
+                const content = editor.value;
+                fetch(`/api/files/${currentFile}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: content
+                })
+                    .then(() => alert('File saved successfully!'))
+                    .catch(error => console.error('Error saving file:', error));
+            } else {
+                saveAsFileBtn.click();
+            }
+        });
+
+        saveAsFileBtn.addEventListener('click', () => {
+            const fileName = prompt('Enter the file name to save as:');
+            if (fileName) {
+                // Implement an API call to the backend to save the file content by filename
+                // For simplicity, let's assume there's a function 'saveFileContent' that saves the content.
+                const content = editor.value;
+                fetch(`/api/files/${fileName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: content
+                })
+                    .then(() => {
+                        currentFile = fileName;
+                        alert('File saved successfully!');
+                    })
+                    .catch(error => console.error('Error saving file:', error));
+            }
+        });
+
+        copyTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('copy');
+        });
+
+        cutTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('cut');
+        });
+
+        pasteTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('paste');
+        });
+
+        undoBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('undo');
+        });
+
+        redoBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('redo');
+        });
+
+        fontSizeSelect.addEventListener('change', () => {
+            const fontSize = fontSizeSelect.value;
+            editor.style.fontSize = `${fontSize}px`;
+        });
+
+        boldTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('bold');
+        });
+
+        italicTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('italic');
+        });
+
+        underlineTextBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('underline');
+        });
+
+        clearFormattingBtn.addEventListener('click', () => {
+            editor.focus();
+            document.execCommand('removeFormat');
+        });
+
+        alignLeftBtn.addEventListener('click', () => {
+            editor.style.textAlign = 'left';
+        });
+
+        alignCenterBtn.addEventListener('click', () => {
+            editor.style.textAlign = 'center';
+        });
+
+        alignRightBtn.addEventListener('click', () => {
+            editor.style.textAlign = 'right';
+        });
+
+        findTextBtn.addEventListener('click', () => {
+            const searchText = prompt('Enter the text to find:');
+            if (searchText) {
+                const editorContent = editor.value;
+                const foundIndex = editorContent.indexOf(searchText);
+                if (foundIndex !== -1) {
+                    editor.focus();
+                    editor.setSelectionRange(foundIndex, foundIndex + searchText.length);
+                } else {
+                    alert('Text not found!');
+                }
+            }
+        });
+
+        replaceTextBtn.addEventListener('click', () => {
+            const searchText = prompt('Enter the text to find:');
+            if (searchText) {
+                const replaceText = prompt('Enter the text to replace with:');
+                if (replaceText) {
+                    const editorContent = editor.value;
+                    const updatedContent = editorContent.replace(new RegExp(searchText, 'g'), replaceText);
+                    editor.value = updatedContent;
+                }
+            }
+        });
+
+        insertLinkBtn.addEventListener('click', () => {
+            const url = prompt('Enter the URL for the link:');
+            if (url) {
+                editor.focus();
+                document.execCommand('createLink', false, url);
+            }
+        });
+
+        editor.addEventListener('input', () => {
+            // Update the character count
+            const text = editor.value;
+            const charCount = text.length;
+            charCountSpan.textContent = charCount;
+
+            // Update the word count
+            const words = text === '' ? 0 : text.trim().split(/\s+/).length;
+            wordCountSpan.textContent = words;
+
+            // Update the line count
+            const lines = text === '' ? 0 : text.split('\n').length;
+            lineCountSpan.textContent = lines;
+        });
+    </script>
+</body>
+</html>
